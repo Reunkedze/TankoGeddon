@@ -4,12 +4,32 @@
 #include "TankController.h"
 #include "TankPawn.h"
 
+ATankController::ATankController()
+{
+	bShowMouseCursor = true;
+}
+
 void ATankController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
 	InputComponent->BindAxis("MoveForward", this, &ATankController::MoveForward);
 	InputComponent->BindAxis("MoveRight", this, &ATankController::MoveRight);
+	InputComponent->BindAxis("RotateRight", this, &ATankController::RotateRight);
+}
+
+void ATankController::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	FVector mouseDirection;
+	DeprojectMousePositionToWorld(MousePos, mouseDirection);
+	FVector TankPosition = TankPawn->GetActorLocation();
+	MousePos.Z = TankPosition.Z;
+
+	FVector dir = MousePos - TankPosition;
+	dir.Normalize();
+	MousePos = TankPosition + dir * 1000.0f;
 }
 
 void ATankController::SetPawn(APawn* InPawn)
@@ -21,6 +41,7 @@ void ATankController::SetPawn(APawn* InPawn)
 
 void ATankController::MoveForward(float Value)
 {
+
 	if(TankPawn)
 		TankPawn->MoveForward(Value);
 }
@@ -29,4 +50,10 @@ void ATankController::MoveRight(float Value)
 {
 	if (TankPawn)
 		TankPawn->MoveRight(Value);
+}
+
+void ATankController::RotateRight(float Value)
+{
+	if (TankPawn)
+		TankPawn->RotateRight(Value);
 }
