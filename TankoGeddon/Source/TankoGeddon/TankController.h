@@ -38,4 +38,7 @@ protected:
 
 	UFUNCTION()
 	void RotateRight(float Value);
+
+	UFUNCTION()
+	void Fire();
 };

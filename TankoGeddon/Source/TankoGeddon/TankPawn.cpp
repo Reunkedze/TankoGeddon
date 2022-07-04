@@ -7,6 +7,7 @@
 #include "Camera\CameraComponent.h"
 #include "TankController.h"
 #include "Kismet\KismetMathLibrary.h"
+#include "Cannon.h"
 
 // Sets default values
 ATankPawn::ATankPawn()
@@ -22,6 +23,11 @@ ATankPawn::ATankPawn()
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(BodyMesh);
+	SpringArm->bDoCollisionTest = false;
+	SpringArm->bInheritPitch = false;
+	SpringArm->bInheritYaw = false;
+	SpringArm->bInheritRoll = false;
+
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
@@ -40,6 +46,14 @@ void ATankPawn::MoveRight(float Value)
 void ATankPawn::RotateRight(float Value)
 {
 	RotateRightAxisValue = Value;
+}
+
+void ATankPawn::Fire()
+{
+	if (Cannon)
+	{
+		Cannon->Fire();
+	}
 }
 
 void ATankPawn::Tick(float DeltaSeconds)
@@ -83,5 +97,26 @@ void ATankPawn::BeginPlay()
 
 	//SetActorLocation(FVector(GetActorLocation().X, GetActorLocation().Y, 0.0f));
 
-		TankController = Cast<ATankController>(GetController());
+	TankController = Cast<ATankController>(GetController());
+
+	SetupCannon();
+}
+
+void ATankPawn::SetupCannon()
+{
+	if (!CannonClass)
+	{
+		return;
+	}
+	if (Cannon)
+	{
+		Cannon->Destroy();
+	}
+	FActorSpawnParameters params;
+	params.Instigator = this;
+	params.Owner = this;
+
+	Cannon = GetWorld()->SpawnActor<ACannon>(CannonClass, params);
+
+	Cannon->AttachToComponent(TurretMesh, FAttachmentTransformRules::SnapToTargetIncludingScale);
 }
