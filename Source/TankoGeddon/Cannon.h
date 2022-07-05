@@ -16,6 +16,7 @@ public:
 	ACannon();
 
 	void Fire();
+	void FireSpecial();
 	void Reload();
 
 protected:
@@ -30,6 +31,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	float ReloadTime = 1.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	int NumberOfProjectiles = 10;
+	int NumberOfTraces = 10;
 
 	FTimerHandle ReloadTimer;
 

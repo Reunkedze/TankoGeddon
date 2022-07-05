@@ -23,6 +23,7 @@ public:
 	void RotateRight(float Value);
 
 	void Fire();
+	void FireSpecial();
 	virtual void Tick( float DeltaSeconds ) override;
 
 	virtual void BeginPlay() override;
@@ -45,8 +46,6 @@ protected:
 	UPROPERTY()
 	ACannon* Cannon;
 
-	void SetupCannon();
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
 	float MoveSpeed = 100.0f;
 
@@ -61,6 +60,8 @@ protected:
 
 	UPROPERTY()
 	class ATankController* TankController;
+
+	void SetupCannon();
 
 private:
 	float TargetForwardAxisValue = 0.0f;

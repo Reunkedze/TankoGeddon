@@ -56,6 +56,14 @@ void ATankPawn::Fire()
 	}
 }
 
+void ATankPawn::FireSpecial()
+{
+	if (Cannon)
+	{
+		Cannon->FireSpecial();
+	}
+}
+
 void ATankPawn::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
@@ -95,7 +103,7 @@ void ATankPawn::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//SetActorLocation(FVector(GetActorLocation().X, GetActorLocation().Y, 0.0f));
+	SetActorLocation(FVector(GetActorLocation().X, GetActorLocation().Y, 50.0f));
 
 	TankController = Cast<ATankController>(GetController());
 
@@ -118,5 +126,5 @@ void ATankPawn::SetupCannon()
 
 	Cannon = GetWorld()->SpawnActor<ACannon>(CannonClass, params);
 
-	Cannon->AttachToComponent(TurretMesh, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	Cannon->AttachToComponent(TurretMesh, FAttachmentTransformRules::SnapToTargetIncludingScale);     
 }
